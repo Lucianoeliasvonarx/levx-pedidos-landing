@@ -5,7 +5,7 @@
   ],
   "rewrites": [
     { "source": "/fogon/", "destination": "/fogon-intro.html" },
-    { "source": "/fogon/carta", "destination": "https://levx-fogon-de-ruta.vercel.app/index.html" },
+    { "source": "/fogon/carta", "destination": "/fogon-carta.html" },
     { "source": "/fogon/:path+", "destination": "https://levx-fogon-de-ruta.vercel.app/:path+" }
   ]
 }
