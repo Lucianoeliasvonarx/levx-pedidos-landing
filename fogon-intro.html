@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2c0d0b">
+<title>Fogón de Ruta · Pedí online</title>
+<meta name="description" content="Lomitos y milanesas al paso. Pedí online.">
+<script>
+  // Una sola vez por visita: si ya la vio, va directo a la carta.
+  (function () {
+    var CARTA = '/fogon/carta' + location.hash;
+    var visto = false;
+    try { visto = sessionStorage.getItem('fogon_intro') === '1'; } catch (e) {}
+    if (visto || navigator.webdriver) { location.replace(CARTA); }
+    window.__CARTA = CARTA;
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500&display=swap">
+<link rel="prefetch" href="/fogon/carta">
+<style>
+  :root { --fondo:#2c0d0b; --crema:#fbf3e6; --suave:rgba(251,243,230,.72); --salida:#FAFAF8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:var(--fondo); color:var(--crema); overflow:hidden; }
+  body { font-family:Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .marco { position:fixed; inset:0; display:grid; place-items:center; }
+  .marco video, .marco img { width:100%; height:100%; object-fit:cover; display:block; }
+  .marco::after { content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(180deg, rgba(20,6,5,.35) 0%, rgba(20,6,5,0) 22%, rgba(20,6,5,0) 52%, rgba(20,6,5,.82) 100%); }
+  @media (min-width:760px) {
+    .marco { left:50%; right:auto; width:min(56.25vh, 100vw); transform:translateX(-50%); }
+    body::before { content:""; position:fixed; inset:0; background:radial-gradient(60% 70% at 50% 55%, #4a1714 0%, var(--fondo) 70%); }
+  }
+  .texto { position:fixed; left:0; right:0; bottom:calc(env(safe-area-inset-bottom,0px) + 9vh); z-index:2;
+    padding:0 28px; text-align:center; }
+  .nombre { margin:0; font-family:Fraunces, Georgia, serif; font-weight:600; letter-spacing:-.01em;
+    font-size:clamp(2.6rem, 11vw, 4.4rem); line-height:.95;
+    opacity:0; transform:translateY(14px); filter:blur(6px);
+    transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1), filter .9s ease; }
+  .eslogan { margin:14px 0 0; font-size:clamp(.95rem, 3.8vw, 1.1rem); color:var(--suave); letter-spacing:.01em;
+    opacity:0; transform:translateY(8px); transition:opacity .8s ease .25s, transform .8s ease .25s; }
+  .ver .nombre { opacity:1; transform:none; filter:none; }
+  .ver .eslogan { opacity:1; transform:none; }
+  .saltear { position:fixed; z-index:3; top:calc(env(safe-area-inset-top,0px) + 16px); right:16px;
+    font:500 13px Inter, system-ui, sans-serif; color:var(--crema); background:rgba(20,6,5,.35);
+    border:1px solid rgba(251,243,230,.28); border-radius:999px; padding:8px 14px; cursor:pointer;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+  .velo { position:fixed; inset:0; z-index:4; background:var(--salida); opacity:0; pointer-events:none; transition:opacity .45s ease; }
+  .sale .velo { opacity:1; }
+</style>
+</head>
+<body>
+  <div class="marco" aria-hidden="true">
+    <video id="v" src="/intro-fogon.mp4" poster="/intro-fogon.jpg" muted playsinline autoplay preload="auto"></video>
+  </div>
+  <div class="texto" id="t">
+    <h1 class="nombre">Fogón de Ruta</h1>
+    <p class="eslogan">Lomitos y milanesas al paso</p>
+  </div>
+  <button class="saltear" id="s" type="button">Saltear</button>
+  <div class="velo"></div>
+<script>
+  (function () {
+    var v = document.getElementById('v'), listo = false;
+    var quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function irACarta() {
+      if (listo) return; listo = true;
+      try { sessionStorage.setItem('fogon_intro', '1'); } catch (e) {}
+      document.body.classList.add('sale');
+      setTimeout(function () { location.replace(window.__CARTA); }, 420);
+    }
+    document.getElementById('s').addEventListener('click', irACarta);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' || e.key === 'Enter') irACarta(); });
+    setTimeout(function () { document.getElementById('t').parentNode.classList.add('ver'); document.body.classList.add('ver'); }, quieto ? 100 : 1500);
+    if (quieto) { v.removeAttribute('autoplay'); v.pause(); setTimeout(irACarta, 1800); return; }
+    v.addEventListener('ended', irACarta);
+    var p = v.play && v.play();
+    if (p && p.catch) p.catch(function () { setTimeout(irACarta, 2600); });
+    setTimeout(irACarta, 7000); // por si el video no carga
+  })();
+</script>
+</body>
+</html>
