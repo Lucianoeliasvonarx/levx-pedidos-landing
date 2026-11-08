@@ -1,0 +1,1 @@
+{"redirects":[{"source":"/fogon","destination":"/fogon/","permanent":false},{"source":"/fogon/panel/:path*","destination":"/fogon/","permanent":false}],"rewrites":[{"source":"/fogon/:path*","destination":"https://levx-fogon-de-ruta.vercel.app/:path*"}]}
