@@ -16,8 +16,8 @@
       texto: 'Tocá cualquier producto para ver cómo viene y sumarlo a tu pedido.' },
     { id: 'barra', donde: function () { return document.getElementById('barra-pedido'); },
       texto: 'Acá está tu pedido. Cuando termines de elegir, tocalo para mandarlo.' },
-    { id: 'confirmar', donde: function () { return document.getElementById('confirmar'); },
-      texto: 'Poné tu nombre y tu WhatsApp y tocá acá. El pedido le llega al local por WhatsApp.' }
+    { id: 'confirmar', donde: function () { return document.getElementById('f-cliente'); },
+      texto: 'Poné tu nombre y tu WhatsApp, y tocá «Confirmar pedido». El pedido le llega al local por WhatsApp.' }
   ];
 
   var css = document.createElement('style');
@@ -61,6 +61,8 @@
     if (!actual || !objetivo) return;
     if (!document.body.contains(objetivo) || ocupado()) { cerrar(false); return; }
     var r = objetivo.getBoundingClientRect(), m = 6;
+    var radio = parseFloat(getComputedStyle(objetivo).borderTopLeftRadius) || 0;
+    aro.style.borderRadius = (radio * 2 >= Math.min(r.width, r.height) - 1) ? '999px' : (radio + m) + 'px';
     aro.style.left = (r.left - m) + 'px'; aro.style.top = (r.top - m) + 'px';
     aro.style.width = (r.width + m * 2) + 'px'; aro.style.height = (r.height + m * 2) + 'px';
     var h = card.offsetHeight, abajo = r.bottom + 14, arriba = r.top - h - 14;
