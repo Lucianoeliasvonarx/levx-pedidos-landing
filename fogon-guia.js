@@ -117,4 +117,6 @@
   addEventListener('resize', ubicar);
   addEventListener('scroll', function () { if (actual) ubicar(); else revisar(); }, { passive: true });
   setTimeout(revisar, 600);
+  // Red de seguridad: la tienda a veces dibuja sin que se note el cambio; revisamos cada tanto.
+  var vigia = setInterval(function () { if (estado.fin) { clearInterval(vigia); return; } if (!actual) revisar(); }, 900);
 })();
